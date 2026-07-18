@@ -1,6 +1,4 @@
-$workflowContent = @"
-name: Expo Android Build
-
+name: Expo Build
 on:
   push:
     branches:
@@ -10,26 +8,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: 🚚 Checkout
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: 🏗️ Setup Node
+        uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
 
-      - name: Install Dependencies
+      - name: 📦 Install dependencies
         run: npm install
 
-      - name: Setup Expo
+      - name: 🚀 Expo Build
         uses: expo/expo-github-action@v8
         with:
-          eas-configuration: true
-          token: \${{ secrets.EXPO_TOKEN }}
-
-      - name: Build Android (Preview)
-        run: eas build --platform android --profile preview --non-interactive
-"@
-
-Set-Content -Path ".github/workflows/build.yml" -Value $workflowContent
+          eas-token: ${{ secrets.EXPO_TOKEN }}
+          command: build --platform android --profile preview
