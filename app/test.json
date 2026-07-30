@@ -1,0 +1,69 @@
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "title": "زیگورات چغازنبیل",
+    "slug": "choqazanbil",
+    "short_description": "نیایشگاه باستانی دوره ایلامیان",
+    "description": "یکی از مهم‌ترین آثار تاریخی ایران و ثبت شده در میراث جهانی یونسکو",
+    "address": "استان خوزستان، نزدیکی شوش",
+    "location": {
+      "province": "خوزستان",
+      "city": "شوش",
+      "latitude": "32.0097000",
+      "longitude": "48.5228000",
+      "altitude": "90"
+    },
+    "category": "تاریخی",
+    "visit_time": "۸ صبح تا ۱۸ عصر",
+    "contact": { "phone": null, "website": null },
+    "features": {
+      "national_registered": true,
+      "suitable_children": true,
+      "suitable_elderly": true,
+      "wheelchair_access": false,
+      "has_stay": false
+    },
+    "road": { "type": "آسفالت", "difficulty": "آسان" },
+    "images": [
+      {
+        "image": "https:\/\/lunaview.ir\/pr\/image\/Choqa_Zanbil_Darafsh_1_(37).jpg",
+        "is_cover": "1"
+      },
+      {
+        "image": "https:\/\/lunaview.ir\/pr\/image\/Choqa_Zanbil_Darafsh_1_(37).jpg",
+        "is_cover": "0"
+      }
+    ],
+    "facilities": [
+      { "id": "1", "title": "سرویس بهداشتی", "icon": "wc" },
+      { "id": "2", "title": "پارکینگ", "icon": "parking" },
+      { "id": "6", "title": "آب آشامیدنی", "icon": "water" },
+      { "id": "8", "title": "آنتن موبایل", "icon": "signal" },
+      { "id": "15", "title": "نگهبان", "icon": "security" }
+    ],
+    "accommodations": [
+      { "id": "5", "title": "اقامتگاه بوم‌گردی" },
+      { "id": "6", "title": "خانه روستایی" }
+    ],
+    "seasons": [
+      { "id": "1", "title": "بهار" },
+      { "id": "2", "title": "تابستان" },
+      { "id": "3", "title": "پاییز" }
+    ],
+    "visitors": [
+      { "id": "1", "title": "خانواده" },
+      { "id": "8", "title": "عکاسان" }
+    ],
+    "rules": [
+      { "id": "4", "title": "روشن کردن آتش فقط در محل مشخص مجاز است" },
+      { "id": "5", "title": "کمپ شبانه ممنوع" },
+      { "id": "7", "title": "امکان چادر زدن وجود دارد" }
+    ],
+    "warnings": [{ "id": "4", "title": "خطر گم شدن در مسیر" }],
+    "equipments": [
+      { "id": "7", "title": "عینک آفتابی", "icon": "sunglasses" },
+      { "id": "8", "title": "کرم ضد آفتاب", "icon": "sun" }
+    ]
+  }
+}
