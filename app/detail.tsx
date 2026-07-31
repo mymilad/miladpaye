@@ -1,20 +1,26 @@
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    ImageBackground,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  ImageBackground,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 export default function DetailScreen() {
   const { id } = useLocalSearchParams();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const { width, height } = Dimensions.get("window");
 
   useEffect(() => {
     fetch(`https://lunaview.ir/pr/api/places/detail.php?id=${id}`)
@@ -54,7 +60,13 @@ export default function DetailScreen() {
       <Text style={styles.chipText}>{title}</Text>
     </View>
   );
-
+  const dynamicStyles = StyleSheet.create({
+    slide: {
+      width: width,
+      height: height * 0.7,
+    },
+    // بقیه استایل‌ها را هم اینجا بگذار یا در StyleSheet معمولی نگه دار
+  });
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <ImageBackground
@@ -65,11 +77,74 @@ export default function DetailScreen() {
           colors={["transparent", "rgba(0,0,0,0.8)"]}
           style={styles.gradient}
         >
+          <View style={styles.overlay}></View>
           <Text style={styles.title}>{data.title}</Text>
           <Text style={styles.category}>{data.category}</Text>
+
+          {data.images && data.images.length > 1 && (
+            <Pressable
+              style={styles.galleryButton}
+              onPress={() => setVisible(true)}
+            >
+              <Ionicons name="images-outline" size={18} color="#fff" />
+              <Text style={styles.galleryButtonText}>مشاهده تصاویر</Text>
+            </Pressable>
+          )}
         </LinearGradient>
       </ImageBackground>
+      {/* modall*/}
 
+      <Modal
+        visible={visible}
+        animationType="fade" // برای گالری fade نرم‌تر از slide است
+        transparent={true} // بسیار مهم برای ایجاد حالت سینمایی
+      >
+        <View style={styles.modalOverlay}>
+          {/* دکمه بستن - قرار دادن در بالا سمت راست/چپ برای دسترسی راحت */}
+          <View style={styles.headerContainer}>
+            <Text style={styles.modalTitle}>گالری تصاویر</Text>
+            <Pressable
+              onPress={() => setVisible(false)}
+              style={styles.closeButton}
+            >
+              <Ionicons name="close" size={32} color="#fff" />
+            </Pressable>
+          </View>
+
+          <FlatList
+            data={data.images}
+            keyExtractor={(_, index) => index.toString()}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  width: width,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ImageBackground
+                  source={{ uri: item.image }}
+                  style={dynamicStyles.slide}
+                  resizeMode="contain" // تغییر از cover به contain برای دیدن کامل تصویر بدون برش
+                />
+              </View>
+            )}
+          />
+
+          {/* شمارنده تصویر (مثلاً 1/5) - اختیاری اما بسیار شیک */}
+          <View style={styles.counterContainer}>
+            <Text style={styles.counterText}>
+              {/* اینجا می‌توانی ایندکس فعلی را از FlatList بگیری */}
+              تصویر
+            </Text>
+          </View>
+        </View>
+      </Modal>
+
+      {/* end modal*/}
       <View style={styles.content}>
         <Text style={styles.description}>{data.description}</Text>
 
@@ -236,4 +311,85 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   warningText: { marginLeft: 10, color: "#d9534f", fontWeight: "600" },
+
+  //new
+
+  headerImageRadius: {
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.18)",
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+  },
+  galleryButton: {
+    position: "absolute",
+    right: 16,
+    bottom: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 240,
+    gap: 6,
+    backgroundColor: "rgba(0,0,0,0.45)",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 999,
+  },
+  galleryButtonText: {
+    color: "#fff",
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingTop: 50,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+
+  //
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.9)", // پس‌زمینه مشکی با شفافیت کم
+    justifyContent: "center",
+  },
+  headerContainer: {
+    flexDirection: "row-reverse", // برای چیدمان راست به چپ در فارسی
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 50, // فاصله از بالای صفحه
+    zIndex: 10,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  modalTitle: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  closeButton: {
+    padding: 5,
+  },
+
+  counterContainer: {
+    position: "absolute",
+    bottom: 50,
+    alignSelf: "center",
+  },
+  counterText: {
+    color: "rgba(255, 255, 255, 0.5)",
+    fontSize: 14,
+  },
 });
